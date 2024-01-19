@@ -1,0 +1,6 @@
+*.exe
+venv/
+*.xml
+*.json
+.idea/
+wx*/
