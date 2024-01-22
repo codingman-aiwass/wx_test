@@ -4,3 +4,4 @@ venv/
 *.json
 .idea/
 wx*/
+__pycache__/

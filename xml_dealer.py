@@ -11,24 +11,25 @@ class xml_dealer:
         namespaces = {'android': 'http://schemas.android.com/apk/res/android'}
         return root.xpath(xpath, namespaces=namespaces)
 
-    def process_view_element(self, element, xpath, xpath_list):
+    def process_view_element(self, element, xpath, xpath_set):
+        if 'text' in element.attrib:
+            text_content = element.attrib['text']
+            if len(text_content) >= 2:
+                # Requirement 1: Print children with text content > 2
+                # print(element.tag, element.attrib['text'])
+                # print(f'{xpath}/{child.tag}[@text="{child.attrib["text"]}"]')  # Print the XPath of the element
+                # print(f'//{element.tag}[@text="{element.attrib["text"]}"]')  # Print the XPath of the element
+                xpath_set.add(f'//{element.tag}[@text="{element.attrib["text"]}"]')
         for child in element:
-            if 'text' in child.attrib:
-                text_content = child.attrib['text']
-                if len(text_content) >= 2:
-                    # Requirement 1: Print children with text content > 2
-                    print(child.tag, child.attrib['text'])
-                    print(f'{xpath}/{child.tag}[@text="{child.attrib["text"]}"]')  # Print the XPath of the element
-                    print(f'//{child.tag}[@text="{child.attrib["text"]}"]')  # Print the XPath of the element
-                    xpath_list.append(f'//{child.tag}[@text="{child.attrib["text"]}"]')
+            self.process_view_element(child,xpath,xpath_set)
 
-                elif len(text_content) < 2:
-                    # Requirement 2: Recursively process children with text content < 2
-                    self.process_view_element(child, self.tree.getpath(child), xpath_list)
+            # elif len(text_content) < 2:
+            #     # Requirement 2: Recursively process children with text content < 2
+            #     self.process_view_element(child, self.tree.getpath(child), xpath_list)
 
-    def main(self) -> list:
-        matches = self.fuzzy_xpath_match(self.root, "//android.webkit.WebView")
-        res = []
+    def main(self) -> set:
+        matches = self.fuzzy_xpath_match(self.root, "/hierarchy")
+        res = set()
         # Process the matched elements
         for element in matches:
             self.process_view_element(element, self.tree.getpath(element), res)

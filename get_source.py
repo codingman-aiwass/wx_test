@@ -1,5 +1,6 @@
 import json
 import time
+import traceback
 
 from appium import webdriver
 from appium.options.common.base import AppiumOptions
@@ -77,16 +78,23 @@ duration_ms = 100  # duration of the swipe in milliseconds
 # 在NATIVE_APP模式下获取所有的XPATH的坐标，并记录。
 
 # 在判断是否点到了一个新界面，利用界面的hash判断是否前后两个页面一致
-pre_page_hash = hash(driver.page_source[:])
-print('pre_page_hash',pre_page_hash)
-
+pre_page = driver.page_source[:]
+# print('pre_page_hash',pre_page)
+driver.current_url
 for xpath_location in xpath_list:
-    driver.find_element(By.XPATH,xpath_location).click()
-    time.sleep(1)
-    this_page_hash = hash(driver.page_source[:])
-    print('this_page_hash',this_page_hash,'xpath_location',xpath_location)
-    if pre_page_hash != this_page_hash:
-        driver.swipe(start_x,start_y,end_x,end_y,duration_ms)
+    try:
+        driver.find_element(By.XPATH,xpath_location).click()
+        time.sleep(1)
+        this_page = driver.page_source[:]
+        print(xpath_location)
+        # TODO 需要修改判断点击组件前后的页面是否是同一个页面的算法
+        # TODO 需要思考一个更完美的返回上一个界面的方法。使用目前的方法时可能会导致有的界面左滑以后直接退出小程序，比如麦当劳的麦麦商城，且该页面左上角没有返回按键
+        if pre_page != this_page:
+            driver.swipe(start_x,start_y,end_x,end_y,duration_ms)
+            time.sleep(1)
+    except Exception as e:
+        print(e.args)
+        print(f'skip {xpath_location}')
 # bounds = driver.find_element(By.XPATH,'//android.view.View[@text="可横向滚动"]').get_attribute("bounds")
 # print(bounds)
 # print(type(bounds))
