@@ -1,16 +1,9 @@
-import json
 import time
-import traceback
 
 from appium import webdriver
 from appium.options.common.base import AppiumOptions
-from appium.webdriver.common.appiumby import AppiumBy
 from appium.webdriver.common.touch_action import TouchAction
-from selenium.webdriver.common.by import By
 
-from xml_dealer import xml_dealer
-import re
-from urllib.parse import urlparse, parse_qs
 options = AppiumOptions()
 options.load_capabilities({
     "platformName": "Android",
@@ -49,17 +42,34 @@ print(window_handlers)
 for handler in window_handlers:
     print('cur handler',handler)
     driver_title = driver.title
-    print(driver_title)
-    driver.switch_to.window(handler)
-    if driver_title.endswith('html:VISIBLE'):
-        info = driver.execute_script('return window.__route__+".html" + (window.__queryString__ ? "?"+window.__queryString__ : ''"")')
-        print(info)
+    info = driver.execute_script(
+        'return "/" + window.__route__  + (window.__queryString__ ? "?"+window.__queryString__ : ''"")')
+    print('driver title ',driver_title)
+    print('info ',info)
+    print('----------------------')
+    if driver_title.endswith(':VISIBLE') or driver_title.endswith('VISIBLE(PAUSED)'):
         break
+    driver.switch_to.window(handler)
+    time.sleep(0.1)
+
 # Close the driver
-# pages/wechat-portal/index.html
-# 首页菜鸟 pages/user/index.html
-driver.execute_script('wx.navigateBack()')
-# ret = driver.execute_script('wx.navigateTo({url:"/pages/user/index"},success(){return "success"},fail(){return "fail"});')
-# print(ret)
+#
+# 首页菜鸟 pages/wechat-portal/index.html
+# 菜鸟订单页面 pages/wechat-portal/index.html
 # driver.execute_script('wx.navigateBack()')
+# driver.execute_script("wx.reLaunch({url:'/pages/wechat-portal/index'})")
+# driver.execute_script("wx.navigateTo({url:'/pages/index/index?activeMenu=2&source=wechat_portal'})")
+# Perform swipe gesture
+# start_x = 0  # starting x-coordinate
+# start_y = 1000  # starting y-coordinate
+# end_x = 200  # ending x-coordinate
+# end_y = 1000  # ending y-coordinate
+# duration_ms = 100  # duration of the swipe in milliseconds
+# touch_action = TouchAction(driver)
+# touch_action.press(x=start_x, y=start_y) \
+#     .wait(100) \
+#     .move_to(x=end_x, y=end_y) \
+#     .release() \
+#     .perform()
+driver.execute_script('wx.switchTab("/pages/wechat-portal/index")')
 driver.quit()
