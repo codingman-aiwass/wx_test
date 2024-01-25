@@ -18,6 +18,10 @@ class xml_dealer:
             text_content = element.attrib['content-desc']
             if text_content == 'content-desc' or text_content == '更多':
                 print('skip close or more button')
+        # if 'text' in element.attrib:
+        #     text_content = element.attrib['text']
+        #     if text_content in ['我的','福利','查快递','首页']:
+        #         print(text_content)
         else:
             xpath_set.add(f'{xpath}')
         for child in element:

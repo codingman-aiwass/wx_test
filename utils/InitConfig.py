@@ -52,11 +52,11 @@ class Driver:
             driver_title = self.driver.title
             print(driver_title)
             self.driver.switch_to.window(handler)
-            if driver_title.endswith('html:VISIBLE'):
+            if driver_title.endswith('html:VISIBLE') or driver_title.endswith(':VISIBLE(PAUSED)'):
                 info = self.driver.execute_script(
-                    'return window.__route__+".html" + (window.__queryString__ ? "?"+window.__queryString__ : ''"")')
+                    'return "/" + window.__route__  + (window.__queryString__ ? "?"+window.__queryString__ : ''"")')
                 print(info)
-                break
+                return handler
 
     def save_page_source_to_file(self,file_name):
         with open(file_name, 'w', encoding='utf8') as f:
