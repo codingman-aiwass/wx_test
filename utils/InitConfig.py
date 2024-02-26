@@ -20,7 +20,8 @@ class Driver:
             "appium:nativeWebScreenshot": True,
             "appium:connectHardwareKeyboard": True,
             "appium:printPageSourceOnFindFailure": True,
-            'chromedriverExecutableDir': 'D:/python/wx_miniapp01/',
+            # 'chromedriverExecutableDir': 'D:/python/wx_miniapp01/',
+            'chromedriverExecutableDir': '~/czf_files/wx_test',
             'chromeOptions': {'androidProcess': 'com.tencent.mm:tools'},
         })
         self.driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", options=self.options)

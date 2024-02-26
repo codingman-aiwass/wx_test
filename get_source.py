@@ -25,7 +25,8 @@ options.load_capabilities({
     "appium:nativeWebScreenshot": True,
     "appium:connectHardwareKeyboard": True,
     "appium:printPageSourceOnFindFailure": True,
-    'chromedriverExecutableDir': 'D:/python/wx_test',
+    # 'chromedriverExecutableDir': 'D:/python/wx_test',
+    'chromedriverExecutableDir': '~/czf_files/wx_test',
     'chromeOptions': {'androidProcess': 'com.tencent.mm:tools'},
 })
 
@@ -34,7 +35,6 @@ driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", options=options)
 # 打印当前界面的xml(小程序或者原生app) or html(小程序)
 # print('xml')
 # print(driver.page_source)
-
 
 # 如果从安卓原生切换到小程序or小程序切换回来, 需要做用switch指令
 # ['NATIVE_APP', 'WEBVIEW_com.tencent.mm', 'WEBVIEW_com.tencent.mm:appbrand0']
@@ -48,6 +48,15 @@ print('driver.current_activity', driver.current_activity)
 #     json.dump(all_source_code,f,indent=4)
 # ret_content = driver.execute_script("var dic = {}; for (var prop in wx) { if (typeof wx[prop] === 'function') { dic[prop]=wx[prop].bind().toString(); } } return dic;")
 # callers = driver.execute_script("var dic = {}; for (var prop in wx) { if (typeof wx[prop] === 'function') { dic[prop]=wx[prop].caller.toString(); } } return dic;")
+
+# 第一次尝试，先获取页面xml并判断是否有隐私政策界面/权限请求页面/弹窗/首页广告
+# 如果有的话，就要先想办法点击掉这些，然后再获取一次首页
+# 弹窗检测：检测到特定的class或者出现了指定关键词直接关闭弹窗（菜鸟：点击关注）或者 根据bounds的坐标或者z-index，发现是否有组件覆盖到其他组件上，有的话说明这个组件是弹窗
+# TODO 在NATIVE APP模式，可能没法检测到弹窗的存在。在appium inspector中是通过切换了hybrid模式以后再获取xml源码才拿到带弹窗的xml。不知如何在代码中实现
+# 权限请求页面：属于平台自身。信息申请、跳转、提示框等类型，在官方手册都会有说明
+# 首页广告：应该会有一个跳过按钮，点击即可
+# 隐私政策界面：应该会有 隐私 字样或者同意按钮，点击即可.根据是否存在android.widget.TextView并且其text属性含有隐私xx字样。同意的属性为android.view.View，含有子属性 android.widget.TextView。通过点击同意跳过
+
 with open('main_page.xml','w',encoding='utf8') as f:
     f.write(driver.page_source)
 my_xml_dealer = xml_dealer('main_page.xml')
@@ -91,8 +100,10 @@ for xpath_location in xpath_list:
     TouchAction(driver).tap(x=xpath_location[0], y=xpath_location[1]).perform()
     time.sleep(1)
     # 适配目前页面合适的handler
-    # TODO 需要找到一个更合适的方法切换handler
-    # TODO 有一些组件消失了
+    # TODO 菜鸟的最底下几个组件的坐标消失了，没能点击到。但是麦当劳的可以点击到，有些页面比较长，按照目前的策略无法点击到
+    # TODO 有两种弹窗需要处理，一种是微信平台的弹窗，比如权限弹窗，通知弹窗，原生弹窗；另一种是小程序的广告弹窗
+    # TODO 需要处理最开始进入小程序时，同意隐私政策的情况
+    # TODO 在批量遍历小程序时，需要考虑如何自动化进入需要遍历的小程序。通过wx.nativateToMiniProgram还需要我们手动点击确认，
     change_to_visible = False
     for handler in driver.window_handles:
         print('cur handler', handler)
@@ -120,8 +131,22 @@ for xpath_location in xpath_list:
         time.sleep(0.1)
     if not change_to_visible:
         # 说明可能进入了相机页面
+        # 但是也有可能是进入了某个页面，这个页面也只有INVISIBLE，和相机表现一致，但是不是相机
         print('press_keycode to exit camera.')
         driver.press_keycode(keycode=4)
+        print('current activity after press keycode',driver.current_activity)
+        if not driver.current_activity[:].startswith('.plugin.appbrand.ui.AppBrandUI0'):
+            # 需要回到刚才的小程序,有两种方法，一种通过xpath点击，一种通过wx.navigateToMiniProgram()跳转,但是效果不好
+            print('go back to miniapp!')
+            print('current activity',driver.current_activity)
+            # 方法1，xpath
+            back_xpath_location = '//android.webkit.WebView[@text="wxb6d22f922f37b35a:pages/recent/recent.html:VISIBLE"]/android.view.View/android.view.View[4]/android.view.View/android.view.View/android.view.View[1]'
+            driver.switch_to.context('NATIVE_APP')
+            driver.find_element(By.XPATH, back_xpath_location).click()
+            driver.switch_to.context('WEBVIEW_com.tencent.mm:appbrand0')
+            # 方法2，wx.navigateToMiniProgram()
+            # driver.execute_script("wx.navigateToMiniProgram({appId:'wx25f982a55e60a540'})")  # 麦
+
         continue
     this_page = driver.execute_script(
         'return "/" + window.__route__  + (window.__queryString__ ? "?"+window.__queryString__ : ''"")')
