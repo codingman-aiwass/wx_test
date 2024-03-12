@@ -1,6 +1,6 @@
 import time
 
-from utils.InitConfig import Driver
+from utils.DriverConfig import Driver
 # 尝试通过appid进入一个没有进入过的小程序
 Driver.get_instance().switch_context_to_hybrid()
 driver = Driver.get_instance().get_driver()

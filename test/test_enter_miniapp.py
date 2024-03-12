@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 
-from utils.InitConfig import Driver
+from utils.DriverConfig import Driver
 
 driver = Driver.get_instance().get_driver()
 print(driver.contexts)

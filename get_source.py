@@ -25,17 +25,16 @@ options.load_capabilities({
     "appium:nativeWebScreenshot": True,
     "appium:connectHardwareKeyboard": True,
     "appium:printPageSourceOnFindFailure": True,
-    # 'chromedriverExecutableDir': 'D:/python/wx_test',
-    'chromedriverExecutableDir': '~/czf_files/wx_test',
+    'chromedriverExecutableDir': 'D:/python/wx_test',
+    # 'chromedriverExecutableDir': '~/czf_files/wx_test',
     'chromeOptions': {'androidProcess': 'com.tencent.mm:tools'},
 })
 
 driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", options=options)
-
 # 打印当前界面的xml(小程序或者原生app) or html(小程序)
 # print('xml')
 # print(driver.page_source)
-
+driver.find
 # 如果从安卓原生切换到小程序or小程序切换回来, 需要做用switch指令
 # ['NATIVE_APP', 'WEBVIEW_com.tencent.mm', 'WEBVIEW_com.tencent.mm:appbrand0']
 # print('after switch')
@@ -104,6 +103,8 @@ for xpath_location in xpath_list:
     # TODO 有两种弹窗需要处理，一种是微信平台的弹窗，比如权限弹窗，通知弹窗，原生弹窗；另一种是小程序的广告弹窗
     # TODO 需要处理最开始进入小程序时，同意隐私政策的情况
     # TODO 在批量遍历小程序时，需要考虑如何自动化进入需要遍历的小程序。通过wx.nativateToMiniProgram还需要我们手动点击确认，
+
+    # TODO 会不会有可能在遍历小程序的过程中出现权限请求弹窗。有没有一种办法能够在遍历小程序之前就同意所有权限请求？
     change_to_visible = False
     for handler in driver.window_handles:
         print('cur handler', handler)
@@ -146,7 +147,6 @@ for xpath_location in xpath_list:
             driver.switch_to.context('WEBVIEW_com.tencent.mm:appbrand0')
             # 方法2，wx.navigateToMiniProgram()
             # driver.execute_script("wx.navigateToMiniProgram({appId:'wx25f982a55e60a540'})")  # 麦
-
         continue
     this_page = driver.execute_script(
         'return "/" + window.__route__  + (window.__queryString__ ? "?"+window.__queryString__ : ''"")')

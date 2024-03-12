@@ -1,12 +1,10 @@
 from lxml import etree
 
 
-# 这个# Requirement 1 2 只适用于菜鸟，不够通用。
-
 class xml_dealer:
-    def __init__(self, xml_name):
-        self.xml_file = xml_name
-        self.tree = etree.parse(xml_name)
+    def __init__(self, xml_content):
+        # self.xml_file = xml_content
+        self.tree = etree.parse(xml_content)
         self.root = self.tree.getroot()
 
     def fuzzy_xpath_match(self, root, xpath):

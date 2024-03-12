@@ -1,5 +1,5 @@
 from utils.xpath2location import convert
-from utils.InitConfig import Driver
+from utils.DriverConfig import Driver
 from utils.xml_dealer import xml_dealer
 driver = Driver.get_instance().get_driver()
 # driver.save_page_source_to_file('main.xml')

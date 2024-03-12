@@ -1,4 +1,6 @@
-from utils.InitConfig import Driver
+import logging
+
+from utils.DriverConfig import Driver
 
 driver = Driver.get_instance().get_driver()
-print(driver.contexts)
+logging.info(driver.contexts)
