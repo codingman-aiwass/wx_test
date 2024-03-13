@@ -4,7 +4,8 @@ from lxml import etree
 class xml_dealer:
     def __init__(self, xml_content):
         # self.xml_file = xml_content
-        self.tree = etree.parse(xml_content)
+        # self.tree = etree.parse(xml_content,parser=etree.XMLParser())
+        self.tree = etree.fromstring(text=xml_content,parser=etree.XMLParser())
         self.root = self.tree.getroot()
 
     def fuzzy_xpath_match(self, root, xpath):

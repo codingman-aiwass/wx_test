@@ -1,29 +1,4 @@
 1. 第一次进入小程序，可能会有权限请求弹窗。以下为最基本的位置信息请求界面。可能还会有其他请求弹窗，比如优惠券通知提醒这种的。常见于付费购买物品以后
-```xml
-<android.widget.RelativeLayout index="2" package="com.tencent.mm" class="android.widget.RelativeLayout" text="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[0,0][1080,2260]" displayed="true">
-                  <android.widget.FrameLayout index="0" package="com.tencent.mm" class="android.widget.FrameLayout" text="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="true" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[0,1604][1080,2260]" displayed="true">
-                    <android.widget.ScrollView index="0" package="com.tencent.mm" class="android.widget.ScrollView" text="" resource-id="com.tencent.mm:id/mcm" checkable="false" checked="false" clickable="false" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[0,1604][1080,2260]" displayed="true">
-                      <android.widget.RelativeLayout index="0" package="com.tencent.mm" class="android.widget.RelativeLayout" text="" resource-id="com.tencent.mm:id/lzo" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[0,1604][1080,2260]" displayed="true">
-                        <android.widget.LinearLayout index="0" package="com.tencent.mm" class="android.widget.LinearLayout" text="" resource-id="com.tencent.mm:id/m00" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[66,1659][1014,1739]" displayed="true">
-                          <android.widget.ImageView index="0" package="com.tencent.mm" class="android.widget.ImageView" text="" resource-id="com.tencent.mm:id/lzs" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[66,1666][132,1732]" displayed="true" />
-                          <android.widget.LinearLayout index="1" package="com.tencent.mm" class="android.widget.LinearLayout" text="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[154,1671][879,1727]" displayed="true">
-                            <android.widget.TextView index="0" package="com.tencent.mm" class="android.widget.TextView" text="莉景天气" resource-id="com.tencent.mm:id/lzw" checkable="false" checked="false" clickable="false" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[154,1671][318,1727]" displayed="true" />
-                            <android.widget.TextView index="1" package="com.tencent.mm" class="android.widget.TextView" text="申请" resource-id="com.tencent.mm:id/lzm" checkable="false" checked="false" clickable="false" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[346,1671][428,1727]" displayed="true" />
-                          </android.widget.LinearLayout>
-                          <android.widget.ImageView index="2" package="com.tencent.mm" class="android.widget.ImageView" text="" content-desc="说明" resource-id="com.tencent.mm:id/lzz" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[901,1626][1047,1772]" displayed="true" />
-                        </android.widget.LinearLayout>
-                        <android.widget.TextView index="1" package="com.tencent.mm" class="android.widget.TextView" text="获取你的位置信息" resource-id="com.tencent.mm:id/lzq" checkable="false" checked="false" clickable="false" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[66,1794][1014,1857]" displayed="true" />
-                        <android.widget.TextView index="2" package="com.tencent.mm" class="android.widget.TextView" text="将获取你的具体位置信息，用于获取用户所在地天气情况" resource-id="com.tencent.mm:id/mwy" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[66,1879][1014,1993]" displayed="true" />
-                        <android.widget.LinearLayout index="3" package="com.tencent.mm" class="android.widget.LinearLayout" text="" resource-id="com.tencent.mm:id/b3v" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[185,2103][895,2213]" displayed="true">
-                          <android.widget.Button index="0" package="com.tencent.mm" class="android.widget.Button" text="拒绝" resource-id="com.tencent.mm:id/lzn" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[185,2103][515,2213]" displayed="true" />
-                          <android.view.View index="1" package="com.tencent.mm" class="android.view.View" text="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[515,2103][565,2213]" displayed="true" />
-                          <android.widget.Button index="2" package="com.tencent.mm" class="android.widget.Button" text="允许" resource-id="com.tencent.mm:id/lzx" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[565,2103][895,2213]" displayed="true" />
-                        </android.widget.LinearLayout>
-                      </android.widget.RelativeLayout>
-                    </android.widget.ScrollView>
-                  </android.widget.FrameLayout>
-                </android.widget.RelativeLayout>
-```
 需要想办法点击允许/同意处理掉
 
 发现：
@@ -49,5 +24,13 @@
 9. 获取小程序NATIVE_APP模式下的xml，获取该页面所有组件的坐标
 
 [//]: # (8. 在执行点击之前，判断是否有广告弹窗/权限请求)
-8. 根据坐标执行点击，点击后需要检查是否进入新页面，每进入一个新页面就将该新页面URL以及请求参数就添加到待跳转队列中。并判断该页面是否有弹窗/权限请求，有的话处理掉再然后回退到原页面，然后继续点击
-9. 点击完一层以后，从刚才的新页面队列中取出新的页面URL以及请求参数，跳转到该页面，并重复执行7-9步
+1. 根据坐标执行点击，点击后需要检查是否进入新页面，每进入一个新页面就将该新页面URL以及请求参数就添加到待跳转队列中。并判断该页面是否有弹窗/权限请求，有的话处理掉再然后回退到原页面，然后继续点击
+2. 点击完一层以后，从刚才的新页面队列中取出新的页面URL以及请求参数，跳转到该页面，并重复执行7-9步
+
+TODO 需要判断在点击途中是否误入了其他小程序，是的话也得退出
+TODO 如果进入了选择城市界面，就直接随便挑选一个，不要在这里浪费太多时间，
+TODO 进入的第一个正常界面中含有登录，是否需要登录。或者在点击组件后跳转到登录界面
+如果进入登录界面的话，需要选择手机好快捷登录并打上底下同意隐私政策的勾
+
+另一个探索内容：判断在分享群聊以后，小程序能否拿到群聊ID信息。
+思考：如何确定要找的小程序类型；如何判断是否分享了ID信息，通过抓包还是静态代码分析。
