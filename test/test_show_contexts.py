@@ -22,7 +22,7 @@ print(driver.current_context)
 # print('driver title', driver.title)
 # print(driver.window_handles)
 # print(driver.current_window_handle)
-# # dic的键为
+# dic的键为
 # dic = {}
 # for handle in driver.window_handles:
 #     driver.switch_to.window(handle)
@@ -38,6 +38,9 @@ print(driver.current_context)
 #         print(title,cur_handle)
 #         break
 # print(dic)
+with open('麦xml首页.html','w',encoding='utf8') as f:
+    f.write(driver.page_source[:])
+# print(driver.page_source[:])
 # if len(dic) == 0:
 #     # 寻找INVISIBLE
 #     for handle in driver.window_handles:
@@ -75,6 +78,7 @@ print(driver.current_activity)
 # driver.switch_to.context('NATIVE_APP')
 # print(driver.page_source)
 print(driver.current_context)
+# driver.find_element(By.ID,)
 # print(driver.title)
 
 # Element containing 'privacy': wx-button, Attributes: id='481b619f--agree-btn', class='btn privacy--btn confirm-btn privacy--confirm-btn data-v-5bb8db51 privacy--data-v-5bb8db51', name='N/A', data-custom='N/A', Text: 我同意
@@ -95,5 +99,3 @@ print(driver.current_context)
 #     print(element)
 #     print(element.location)
 #     element.click()
-
-content = driver.page_source[:]

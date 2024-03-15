@@ -63,6 +63,9 @@ class Driver:
         self.pre_driver_title = None
         # 保存页面队列，存放待点击页面的URL
         self.pages_to_be_traverse_future = set()
+        # 记录当前小程序是否已经登录,如果没有登录，需要在进入首页正式开始点击之前点击登录，否则无法继续进行遍历。
+        # 如果首页没有去登录相关字样，则在点击首页组件之后做判断，是否进入登录界面
+        self.hasLoggedIn = False
 
 
     # def __new__(cls, *args, **kwargs):
