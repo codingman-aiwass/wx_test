@@ -1,3 +1,4 @@
+import re
 import time
 
 from appium import webdriver
@@ -66,7 +67,15 @@ class Driver:
         # 记录当前小程序是否已经登录,如果没有登录，需要在进入首页正式开始点击之前点击登录，否则无法继续进行遍历。
         # 如果首页没有去登录相关字样，则在点击首页组件之后做判断，是否进入登录界面
         self.hasLoggedIn = False
-
+        # 如果还没有同意过隐私政策，点击登录之后，进入小程序时都要检查是否出现隐私政策同意界面
+        self.hasAgreed_pp = False
+        # 如果还没有拒绝过消息发送申请，则在点击 我的 之后需要检查
+        self.hasRefusedMessageRequest = False
+        # 如果还没有选择过城市，在进入小程序主页时，检查过广告弹窗以后就需要检查是否进入城市选择界面
+        self.XML_dealer = None
+        self.HTML_dealer = None
+        # 测试机手机号
+        self.phone_number = '13431940163'
 
     # def __new__(cls, *args, **kwargs):
     #     if not hasattr(Driver, "_instance"):
@@ -79,11 +88,26 @@ class Driver:
     #         Driver._instance = Driver(*args, **kwargs)
     #     return Driver._instance
 
+    def set_xml_dealer(self, xml_dealer):
+        self.XML_dealer = xml_dealer
+
+    def set_html_dealer(self, html_dealer):
+        self.HTML_dealer = html_dealer
+
+    def get_sms_code_and_login(self):
+        # 该方法目前适用于菜鸟
+        notifications = self.driver.execute_script('mobile: getNotifications')
+        text = notifications['statusBarNotifications'][0]['notification']['text']
+        pattern = re.compile(r'验证码：(\d{6})，10分钟内有效。')
+        codes = pattern.findall(text)
+        for s in codes[0]:
+            self.driver.find_element(By.ID, f"com.tencent.mm:id/tenpay_keyboard_{s}").click()
+            time.sleep(0.1)
+
+
     def get_driver(self):
         return self.driver
 
-    def get_page_source(self):
-        return self.driver.page_source[:]
 
     def switch_context_to_hybrid(self):
         self.driver.switch_to.context('WEBVIEW_com.tencent.mm:appbrand0')
@@ -136,11 +160,12 @@ class Driver:
         # 说明连invisible handler都找不到
         # TODO 记录这类页面
         return False
+
     def get_current_url_and_parameter(self):
         # 只能在切换成功window_handler以后才能通过获取js注入获取当前url和请求参数
         if self.switch_window_handler_to_visible():
             info = self.driver.execute_script(
-            'return "/" + window.__route__  + (window.__queryString__ ? "?"+window.__queryString__ : ''"")')
+                'return "/" + window.__route__  + (window.__queryString__ ? "?"+window.__queryString__ : ''"")')
             return info
         # 没有url
         return None
@@ -158,16 +183,16 @@ class Driver:
         # 当前界面不是webview界面,判断driver_title
         return self.pre_driver_title == self.driver.title[:]
 
-    def click_xpath(self,xpath):
+    def click_xpath(self, xpath):
         try:
             logger.info(f'xpath to click: {xpath}')
-            self.driver.find_element(By.XPATH,xpath).click()
+            self.driver.find_element(By.XPATH, xpath).click()
         except Exception as e:
             logger.info('error occurred in click_xpath()')
             logger.exception(e)
+
     def refresh_driver(self):
         self.driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", options=self.options)
-
 
     def to_recent_used_page(self):
         self.switch_context_to_default()
@@ -187,8 +212,10 @@ class Driver:
             self.driver.back()
         logger.info("to_recent_used_page() done..")
 
-    def perform_swipe_operation(self,start_x,start_y,end_x,end_y,duration_ms):
-        TouchAction(self.driver).press(x=start_x, y=start_y).wait(duration_ms).move_to(x=end_x, y=end_y).release().perform()
+    def perform_swipe_operation(self, start_x, start_y, end_x, end_y, duration_ms):
+        TouchAction(self.driver).press(x=start_x, y=start_y).wait(duration_ms).move_to(x=end_x,
+                                                                                       y=end_y).release().perform()
+
     def perform_swipe_from_left_to_center(self):
         # 从屏幕边缘往中间滑
         start_x = 0  # starting x-coordinate
@@ -196,8 +223,8 @@ class Driver:
         end_x = 200  # ending x-coordinate
         end_y = 1000  # ending y-coordinate
         duration_ms = 100  # duration of the swipe in milliseconds
-        TouchAction(self.driver).press(x=start_x, y=start_y).wait(duration_ms).move_to(x=end_x, y=end_y).release().perform()
-
+        TouchAction(self.driver).press(x=start_x, y=start_y).wait(duration_ms).move_to(x=end_x,
+                                                                                       y=end_y).release().perform()
 
     def to_configured_mini_program(self, app_id):
         self.switch_context_to_hybrid()
@@ -209,6 +236,3 @@ class Driver:
     # 测试下一个小程序之前，清除上一个小程序的缓存记录。
     def refresh_dic(self):
         self.visible_url2handler = {}
-
-
-
